@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { WebGLRenderer, PerspectiveCamera, Vector3, Scene, AxesHelper, PointLight, PCFSoftShadowMap} from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {fromEvent, Observable, Subscription} from 'rxjs';
 
 @Component({
@@ -17,6 +18,7 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private renderer: WebGLRenderer;
   private camera: PerspectiveCamera;
+  private controls: OrbitControls;
   private resizeSubscription: Subscription;
 
   private get canvas(): HTMLCanvasElement {
@@ -59,10 +61,10 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setClearColor(0xffffff, 1);
     this.renderer.autoClear = true;
 
-/*    this.controls = new OrbitControls(this.camera);
+    this.controls = new OrbitControls(this.camera);
     this.controls.rotateSpeed = 1.0;
     this.controls.zoomSpeed = 1.2;
-    this.controls.addEventListener('change', this.render);*/
+    this.controls.addEventListener('change', this.render);
 
     this.startRendering();
   }
