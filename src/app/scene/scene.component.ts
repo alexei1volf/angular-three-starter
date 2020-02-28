@@ -61,7 +61,7 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setClearColor(0xffffff, 1);
     this.renderer.autoClear = true;
 
-    this.controls = new OrbitControls(this.camera);
+    this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.rotateSpeed = 1.0;
     this.controls.zoomSpeed = 1.2;
     this.controls.addEventListener('change', this.render);
