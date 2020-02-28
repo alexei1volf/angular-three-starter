@@ -8,7 +8,7 @@ import {fromEvent, Observable, Subscription} from 'rxjs';
   styleUrls: ['./scene.component.scss']
 })
 export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('canvas', {static: false})
+  @ViewChild('canvas')
   public canvasRef: ElementRef;
   public scene: Scene;
   public fieldOfView = 60;
