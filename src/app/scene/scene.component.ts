@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import { WebGLRenderer, PerspectiveCamera, Vector3, Scene, AxesHelper, PointLight, PCFSoftShadowMap} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {fromEvent, Observable, Subscription} from 'rxjs';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 
 @Component({
   selector: 'app-scene',
@@ -66,6 +67,10 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.controls.zoomSpeed = 1.2;
     this.controls.addEventListener('change', this.render);
 
+    const loader = new GLTFLoader();
+    loader.load('assets/gltf/damaged-helmet//DamagedHelmet.gltf', (gltf) => {
+      this.scene.add(gltf.scene);
+    });
     this.startRendering();
   }
 
