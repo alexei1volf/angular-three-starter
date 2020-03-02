@@ -65,7 +65,6 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.rotateSpeed = 1.0;
     this.controls.zoomSpeed = 1.2;
-    this.controls.addEventListener('change', this.render);
 
     const loader = new GLTFLoader();
     loader.load('assets/gltf/damaged-helmet//DamagedHelmet.gltf', (gltf) => {
