@@ -1,5 +1,15 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { WebGLRenderer, PerspectiveCamera, Vector3, Scene, AxesHelper, PointLight, PCFSoftShadowMap} from 'three';
+import {
+  WebGLRenderer,
+  PerspectiveCamera,
+  Vector3,
+  Scene,
+  AxesHelper,
+  PointLight,
+  PCFSoftShadowMap,
+  DirectionalLight,
+  SpotLight, HemisphereLight, AmbientLight, SpotLightHelper
+} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -38,15 +48,25 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.scene = new Scene();
-    this.scene.add(new AxesHelper(200));
 
-    const light1 = new PointLight(0xffffff, 1, 1000);
-    light1.position.set(0, 0, 100);
-    this.scene.add(light1);
+    const ambientLight = new AmbientLight(0xa0a0a0, 2);
+    this.scene.add(ambientLight);
 
-    const light2 = new PointLight(0xffffff, 1, 1000);
-    light2.position.set(0, 0, -100);
-    this.scene.add(light2);
+    const spotLight = new SpotLight( 0xffffff);
+    spotLight.position.set( 100, 1000, 100 );
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+    this.scene.add(spotLight);
+    this.scene.add(new SpotLightHelper(spotLight));
+
+    const spotLight2 = new SpotLight( 0xffebda, 1, 1000, 0.9);
+    spotLight2.position.set( 100, 100, 100 );
+    spotLight2.castShadow = true;
+    spotLight2.shadow.mapSize.width = 1024;
+    spotLight2.shadow.mapSize.height = 1024;
+    this.scene.add(spotLight2);
+    this.scene.add(new SpotLightHelper(spotLight2));
 
     const aspectRatio = this.getAspectRatio();
     this.camera = new PerspectiveCamera(this.fieldOfView, aspectRatio, this.nearClippingPane, this.farClippingPane);
@@ -54,13 +74,13 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.camera.position.y = 10;
     this.camera.position.z = 100;
 
-    this.renderer = new WebGLRenderer({canvas: this.canvas, antialias: true});
+    this.renderer = new WebGLRenderer({
+      canvas: this.canvas
+    });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
-    this.renderer.setClearColor(0xffffff, 1);
-    this.renderer.autoClear = true;
 
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.rotateSpeed = 1.0;
@@ -68,7 +88,10 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const loader = new GLTFLoader();
     loader.load('assets/gltf/damaged-helmet//DamagedHelmet.gltf', (gltf) => {
-      this.scene.add(gltf.scene);
+      const scene = gltf.scene;
+      const helmet3dModel = scene.children[0];
+      helmet3dModel.scale.copy(new Vector3(30, 30, 30));
+      this.scene.add(helmet3dModel);
     });
     this.startRendering();
   }
