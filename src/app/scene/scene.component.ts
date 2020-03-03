@@ -49,24 +49,18 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     this.scene = new Scene();
 
-    const ambientLight = new AmbientLight(0xa0a0a0, 2);
+    const ambientLight = new AmbientLight(0xa0a0a0, 5);
     this.scene.add(ambientLight);
 
-    const spotLight = new SpotLight( 0xffffff);
-    spotLight.position.set( 100, 1000, 100 );
+    const spotLight = new SpotLight( 0xffffff, 5);
+    spotLight.position.set( 50, 50, 50 );
     spotLight.castShadow = true;
     spotLight.shadow.mapSize.width = 1024;
     spotLight.shadow.mapSize.height = 1024;
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
     this.scene.add(spotLight);
-    this.scene.add(new SpotLightHelper(spotLight));
-
-    const spotLight2 = new SpotLight( 0xffebda, 1, 1000, 0.9);
-    spotLight2.position.set( 100, 100, 100 );
-    spotLight2.castShadow = true;
-    spotLight2.shadow.mapSize.width = 1024;
-    spotLight2.shadow.mapSize.height = 1024;
-    this.scene.add(spotLight2);
-    this.scene.add(new SpotLightHelper(spotLight2));
 
     const aspectRatio = this.getAspectRatio();
     this.camera = new PerspectiveCamera(this.fieldOfView, aspectRatio, this.nearClippingPane, this.farClippingPane);
@@ -75,7 +69,9 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.camera.position.z = 100;
 
     this.renderer = new WebGLRenderer({
-      canvas: this.canvas
+      canvas: this.canvas,
+      antialias: true,
+      preserveDrawingBuffer: true
     });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
