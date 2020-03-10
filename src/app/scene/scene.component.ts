@@ -83,7 +83,7 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.controls.zoomSpeed = 1.2;
 
     const loader = new GLTFLoader();
-    loader.load('assets/gltf/damaged-helmet//DamagedHelmet.gltf', (gltf) => {
+    loader.load('assets/gltf/damaged-helmet/DamagedHelmet.gltf', (gltf) => {
       const scene = gltf.scene;
       const helmet3dModel = scene.children[0];
       helmet3dModel.scale.copy(new Vector3(30, 30, 30));
