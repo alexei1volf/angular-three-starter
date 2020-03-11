@@ -8,7 +8,7 @@ import {
   PointLight,
   PCFSoftShadowMap,
   DirectionalLight,
-  SpotLight, HemisphereLight, AmbientLight, SpotLightHelper
+  SpotLight, HemisphereLight, AmbientLight, SpotLightHelper, BoxGeometry, MeshStandardMaterial, Mesh, Color, Euler
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {fromEvent, Observable, Subscription} from 'rxjs';
@@ -49,11 +49,11 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     this.scene = new Scene();
 
-    const ambientLight = new AmbientLight(0xa0a0a0, 5);
+    const ambientLight = new AmbientLight(0xa0a0a0, 0.5);
     this.scene.add(ambientLight);
 
-    const spotLight = new SpotLight( 0xffffff, 5);
-    spotLight.position.set( 50, 50, 50 );
+    const spotLight = new SpotLight( 0xffffff, 0.5);
+    spotLight.position.set( -50, 50, 50 );
     spotLight.castShadow = true;
     spotLight.shadow.mapSize.width = 1024;
     spotLight.shadow.mapSize.height = 1024;
@@ -64,8 +64,8 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const aspectRatio = this.getAspectRatio();
     this.camera = new PerspectiveCamera(this.fieldOfView, aspectRatio, this.nearClippingPane, this.farClippingPane);
-    this.camera.position.x = 10;
-    this.camera.position.y = 10;
+    this.camera.position.x = 50;
+    this.camera.position.y = 50;
     this.camera.position.z = 100;
 
     this.renderer = new WebGLRenderer({
@@ -77,18 +77,22 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
+    this.renderer.setClearColor(0x3a3030, 1);
+    this.renderer.autoClear = true;
 
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.rotateSpeed = 1.0;
     this.controls.zoomSpeed = 1.2;
 
-    const loader = new GLTFLoader();
-    loader.load('assets/gltf/damaged-helmet/DamagedHelmet.gltf', (gltf) => {
-      const scene = gltf.scene;
-      const helmet3dModel = scene.children[0];
-      helmet3dModel.scale.copy(new Vector3(30, 30, 30));
-      this.scene.add(helmet3dModel);
+    const geo = new BoxGeometry(10, 5, 5);
+    const mat = new MeshStandardMaterial({
+      color: 0xdddddd,
+      roughness: 1,
+      metalness: 0.1
     });
+    const mesh = new Mesh(geo, mat);
+    this.scene.add(mesh);
+
     this.startRendering();
   }
 
