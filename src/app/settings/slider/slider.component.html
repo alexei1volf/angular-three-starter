@@ -1,5 +1,6 @@
 <mat-label>{{label}}</mat-label>
 <mat-slider
+        [value]="value"
         (valueChange)="onValueChange($event)"
         min="0"
         max="1"

@@ -7,10 +7,15 @@ import {BehaviorSubject} from 'rxjs';
 export class SettingsService {
 
   roughnessChanged = new BehaviorSubject(0.1);
+  metalnessChanged = new BehaviorSubject(0.5);
 
   constructor() { }
 
   changeRoughness(value: number) {
     this.roughnessChanged.next(value);
+  }
+
+  changeMetalness(value: number) {
+    this.metalnessChanged.next(value);
   }
 }

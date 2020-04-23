@@ -46,14 +46,13 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {
         this.geo = new BoxGeometry(10, 5, 5);
         this.mat = new MeshStandardMaterial({
-            color: 0xdddddd,
-            roughness: 1,
-            metalness: 0.1
+            color: 0xdddddd
         });
         this.mesh = new Mesh(this.geo, this.mat);
         this.subs.push(
             fromEvent(window, 'resize').subscribe(event => this.onResize(event)),
-            this.settingsService.roughnessChanged.subscribe(roughness => this.mat.roughness = roughness)
+            this.settingsService.roughnessChanged.subscribe(roughness => this.mat.roughness = roughness),
+            this.settingsService.metalnessChanged.subscribe(metalness => this.mat.metalness = metalness)
         );
     }
 

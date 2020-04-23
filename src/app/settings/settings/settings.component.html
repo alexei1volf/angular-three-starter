@@ -1,4 +1,5 @@
 <mat-card>
     <mat-card-title>Settings</mat-card-title>
-    <app-slider label="Roughness" (valueChanged)="onRoughnessChanged($event)"></app-slider>
+    <app-slider label="Roughness" [value]="roughness" (valueChanged)="onRoughnessChanged($event)"></app-slider>
+    <app-slider label="Metalness" [value]="metalness" (valueChanged)="onMetalnessChanged($event)"></app-slider>
 </mat-card>
