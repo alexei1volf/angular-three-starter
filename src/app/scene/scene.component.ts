@@ -5,6 +5,7 @@ import {
     DirectionalLight,
     HemisphereLight,
     Mesh,
+    MeshPhysicalMaterial,
     MeshStandardMaterial,
     PCFSoftShadowMap,
     PerspectiveCamera,
@@ -120,6 +121,10 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
         this.controls.zoomSpeed = 1.2;
 
         const loader = new TextureLoader();
+        const map = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg');
+        const normalMap = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Normal.jpg');
+        const roughnessMap = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Roughness.jpg');
+
         const geo = new BoxGeometry(10, 10, 10);
 
         const mat0 = new MeshStandardMaterial({
@@ -138,7 +143,7 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
         gui.add(mat0, 'metalness', 0, 1);
 
         const mat1 = new MeshStandardMaterial({
-            map: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg')
+            map
         });
         const mesh1 = new Mesh(geo, mat1);
         mesh1.castShadow = true;
@@ -147,8 +152,8 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scene.add(mesh1);
 
         const mat2 = new MeshStandardMaterial({
-            map: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg'),
-            normalMap: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Normal.jpg')
+            map,
+            normalMap
         });
         const mesh2 = new Mesh(geo, mat2);
         mesh2.castShadow = true;
@@ -157,15 +162,30 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scene.add(mesh2);
 
         const mat3 = new MeshStandardMaterial({
-            map: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg'),
-            normalMap: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Normal.jpg'),
-            roughnessMap: loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Roughness.jpg'),
+            map,
+            normalMap,
+            roughnessMap
         });
         const mesh3 = new Mesh(geo, mat3);
         mesh3.castShadow = true;
         mesh3.receiveShadow = true;
         mesh3.position.set(10, 0, 0);
         this.scene.add(mesh3);
+
+
+        const mat4 = new MeshPhysicalMaterial( {
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.5,
+            map,
+            normalMap
+        } );
+
+        gui.add(mat4, 'clearcoat', 0, 1);
+        gui.add(mat4, 'clearcoatRoughness', 0, 1);
+
+        const mesh4 = new Mesh(geo, mat4);
+        mesh4.position.set(-30, 0, 0);
+        this.scene.add(mesh4);
 
         this.startRendering();
     }
