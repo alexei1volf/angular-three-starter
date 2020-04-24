@@ -1,21 +1,19 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {GUI} from 'dat.gui';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
 
-  roughnessChanged = new BehaviorSubject(0.1);
-  metalnessChanged = new BehaviorSubject(0.5);
+  private _gui: GUI;
 
-  constructor() { }
-
-  changeRoughness(value: number) {
-    this.roughnessChanged.next(value);
+  get gui(): GUI {
+    return this._gui;
   }
 
-  changeMetalness(value: number) {
-    this.metalnessChanged.next(value);
+  constructor() {
+    this._gui = new GUI();
   }
+
 }

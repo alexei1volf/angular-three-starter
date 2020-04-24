@@ -4,7 +4,6 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {fromEvent, Subscription} from 'rxjs';
 import {SettingsService} from '../settings/settings.service';
 import {ColorGUIHelper} from '../colorGUIHelper';
-import {GUI} from 'dat.gui';
 import {SceneService} from './scene.service';
 
 @Component({
@@ -46,8 +45,7 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         const scene = this.sceneService.scene;
-
-        const gui = new GUI();
+        const gui = this.settingsService.gui;
 
         const ambientLight = new AmbientLight(0x222222, 0.1);
         scene.add(ambientLight);
