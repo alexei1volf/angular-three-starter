@@ -9,6 +9,8 @@ import {MatSliderModule} from '@angular/material/slider';
 import {SettingsComponent} from './settings/settings/settings.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {MatInputModule} from '@angular/material/input';
     BrowserAnimationsModule,
     MatSliderModule,
     MatCardModule,
-    MatInputModule
+    MatInputModule,
+    MatMenuModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
