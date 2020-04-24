@@ -2,8 +2,9 @@
 
 <mat-menu #appMenu="matMenu">
     <button mat-menu-item (click)="onColourClick()">Color</button>
+    <button mat-menu-item (click)="onNormalMapClick()">NormalMap</button>
     <button mat-menu-item (click)="onMetalnessClick()">Metalness/Roughness</button>
-    <button mat-menu-item>Help</button>
+
 </mat-menu>
 
 <button mat-icon-button [matMenuTriggerFor]="appMenu" class="dots">

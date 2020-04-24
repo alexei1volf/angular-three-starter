@@ -4,6 +4,7 @@ import {Color, Mesh, MeshStandardMaterial, SphereBufferGeometry, TextureLoader} 
 import {Texture} from 'three/src/textures/Texture';
 import {ColorGUIHelper} from './colorGUIHelper';
 import {SettingsService} from './settings/settings.service';
+import {GUI} from 'dat.gui';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
     map: Texture;
     normalMap: Texture;
     roughnessMap: Texture;
-    gius: Object[] = [];
+    tempGui: GUI;
 
     constructor(public sceneService: SceneService,
                 public settingsService: SettingsService) {
@@ -30,6 +31,8 @@ export class AppComponent implements OnInit {
     }
 
     onColourClick() {
+        this.clean();
+
         const geometry = new SphereBufferGeometry(100, 32, 16);
         const material = new MeshStandardMaterial({
             color: 0x3a3030,
@@ -37,14 +40,38 @@ export class AppComponent implements OnInit {
             roughness: 1.0
         });
         const mesh = new Mesh(geometry, material);
-        this.sceneService.scene.add(mesh);
+        this.sceneService.add(mesh);
 
         const gui = this.settingsService.gui;
+        this.tempGui = gui.addFolder('colour');
         const colorGUIHelper = new ColorGUIHelper(material, 'color');
-        gui.addColor(colorGUIHelper, 'value').name('color');
+        this.tempGui.addColor(colorGUIHelper, 'value').name('color');
+        this.tempGui.add(material, 'metalness', 0, 1);
+        this.tempGui.add(material, 'roughness', 0, 1);
+    }
+
+    onNormalMapClick() {
+        this.clean();
+
+        const geometry = new SphereBufferGeometry(100, 32, 16);
+        const material = new MeshStandardMaterial({
+            map: this.map
+        });
+        const materialNorm = new MeshStandardMaterial({
+            map: this.map,
+            normalMap: this.normalMap
+        });
+        const mesh1 = new Mesh(geometry, material);
+        mesh1.position.set(-100, 0, 0);
+        this.sceneService.add(mesh1);
+        const mesh2 = new Mesh(geometry, materialNorm);
+        mesh2.position.set(100, 0, 0);
+        this.sceneService.add(mesh2);
     }
 
     onMetalnessClick() {
+        this.clean();
+
         const bumpScale = 1;
         const cubeWidth = 400;
         const numberOfSphersPerSide = 5;
@@ -75,9 +102,16 @@ export class AppComponent implements OnInit {
                     mesh.position.y = beta * 400 - 200;
                     mesh.position.z = gamma * 400 - 200;
 
-                    this.sceneService.scene.add(mesh);
+                    this.sceneService.add(mesh);
                 }
             }
         }
+    }
+
+    private clean() {
+        if (this.tempGui) {
+            this.settingsService.gui.removeFolder(this.tempGui);
+        }
+        this.sceneService.clean();
     }
 }
