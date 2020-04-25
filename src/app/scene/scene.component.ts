@@ -34,8 +34,6 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {
         this.subs.push(
             fromEvent(window, 'resize').subscribe(event => this.onResize(event)),
-            // this.settingsService.roughnessChanged.subscribe(roughness => this.mat.roughness = roughness),
-            // this.settingsService.metalnessChanged.subscribe(metalness => this.mat.metalness = metalness)
         );
     }
 

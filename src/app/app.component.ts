@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SceneService} from './scene/scene.service';
 import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereBufferGeometry, TextureLoader, Vector3} from 'three';
-import {Texture} from 'three/src/textures/Texture';
 import {ColorGUIHelper} from './colorGUIHelper';
 import {SettingsService} from './settings/settings.service';
 import {GUI} from 'dat.gui';
@@ -15,20 +14,15 @@ import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 export class AppComponent implements OnInit {
     title = 'angular-three-starter';
 
-    map: Texture;
-    normalMap: Texture;
-    roughnessMap: Texture;
     tempGui: GUI;
+    textureLoader: TextureLoader;
 
     constructor(public sceneService: SceneService,
                 public settingsService: SettingsService) {
     }
 
     ngOnInit(): void {
-        const loader = new TextureLoader();
-        this.map = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg');
-        this.normalMap = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Normal.jpg');
-        this.roughnessMap = loader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Roughness.jpg');
+        this.textureLoader = new TextureLoader();
     }
 
     onColourClick() {
@@ -76,13 +70,16 @@ export class AppComponent implements OnInit {
     onNormalMapTextureClick() {
         this.clean();
 
+        const map = this.textureLoader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg');
+        const normalMap = this.textureLoader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Normal.jpg');
+
         const geometry = new SphereBufferGeometry(100, 32, 16);
         const material = new MeshStandardMaterial({
-            map: this.map
+            map
         });
         const materialNorm = new MeshStandardMaterial({
-            map: this.map,
-            normalMap: this.normalMap
+            map,
+            normalMap
         });
         const mesh1 = new Mesh(geometry, material);
         mesh1.position.set(-100, 0, 0);
@@ -101,6 +98,8 @@ export class AppComponent implements OnInit {
         const sphereRadius = (cubeWidth / numberOfSphersPerSide) * 0.8 * 0.5;
         const stepSize = 1.0 / numberOfSphersPerSide;
 
+        const map = this.textureLoader.load('assets/texture/Rock025_2K-JPG/Rock025_2K_Color.jpg');
+
         const geometry = new SphereBufferGeometry(sphereRadius, 32, 16);
 
         for (let alpha = 0; alpha <= 1.0; alpha += stepSize) {
@@ -111,8 +110,8 @@ export class AppComponent implements OnInit {
                     const diffuseColor = new Color().setHSL(alpha, 0.5, gamma * 0.5 + 0.1);
 
                     const material = new MeshStandardMaterial({
-                        map: this.map,
-                        bumpMap: this.map,
+                        map,
+                        bumpMap: map,
                         bumpScale,
                         color: diffuseColor,
                         metalness: beta,
