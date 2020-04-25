@@ -1,0 +1,12 @@
+<app-scene></app-scene>
+
+<mat-menu #appMenu="matMenu">
+    <button mat-menu-item (click)="onColourClick()">Color</button>
+    <button mat-menu-item (click)="onMetalnessClick()">Metalness/Roughness</button>
+    <button mat-menu-item (click)="onNormalMapVolumeClick()">NormalMapVolume</button>
+    <button mat-menu-item (click)="onNormalMapTextureClick()">NormalMapTexture</button>
+</mat-menu>
+
+<button mat-icon-button [matMenuTriggerFor]="appMenu" class="dots">
+    <mat-icon>more_vert</mat-icon>
+</button>

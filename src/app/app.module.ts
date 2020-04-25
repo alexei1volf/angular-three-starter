@@ -10,12 +10,20 @@ import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {SkyboxComponent} from './skybox/skybox.component';
+import {RouterModule, Routes} from '@angular/router';
+import {PbrComponent} from './pbr/pbr.component';
+
+const routes: Routes = [
+  { path: '', component: PbrComponent },
+  { path: 'skybox', component: SkyboxComponent }
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     SceneComponent,
-    SkyboxComponent
+    SkyboxComponent,
+    PbrComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +32,8 @@ import {SkyboxComponent} from './skybox/skybox.component';
     MatCardModule,
     MatInputModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]

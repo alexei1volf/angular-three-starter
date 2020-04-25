@@ -1,21 +1,20 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
-  AmbientLight,
-  BackSide,
-  BoxBufferGeometry,
-  CubeTextureLoader,
-  Mesh,
-  MeshLambertMaterial,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene,
-  ShaderLib,
-  ShaderMaterial,
-  SphereBufferGeometry,
-  SphericalReflectionMapping,
-  sRGBEncoding,
-  TextureLoader,
-  WebGLRenderer
+    AmbientLight,
+    BackSide,
+    BoxBufferGeometry,
+    CubeTextureLoader,
+    Mesh,
+    MeshLambertMaterial,
+    PerspectiveCamera,
+    Scene,
+    ShaderLib,
+    ShaderMaterial,
+    SphereBufferGeometry,
+    SphericalReflectionMapping,
+    sRGBEncoding,
+    TextureLoader,
+    WebGLRenderer
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {fromEvent, Subscription} from 'rxjs';
@@ -61,7 +60,7 @@ export class SkyboxComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cubeScene = new Scene();
         const gui = new GUI();
 
-        const ambientLight = new AmbientLight(0x222222);
+        const ambientLight = new AmbientLight(0xffffff);
         this.scene.add(ambientLight);
         gui.addColor(new ColorGUIHelper(ambientLight, 'color'), 'value').name('color');
         gui.add(ambientLight, 'intensity', 0, 1);
@@ -72,16 +71,12 @@ export class SkyboxComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cubeCamera = new PerspectiveCamera(70, aspectRatio, 1, 100000);
 
         this.renderer = new WebGLRenderer({
-            canvas: this.canvas,
-            antialias: true,
-            preserveDrawingBuffer: true
+            canvas: this.canvas
         });
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = PCFSoftShadowMap;
-        this.renderer.setClearColor(0xffffff, 1);
-        this.renderer.autoClear = true;
+        this.renderer.autoClear = false;
+        this.renderer.outputEncoding = sRGBEncoding;
 
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.rotateSpeed = 1.0;
