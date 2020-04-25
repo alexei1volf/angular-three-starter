@@ -80,9 +80,9 @@ export class SceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const aspectRatio = this.getAspectRatio();
         this.camera = new PerspectiveCamera(this.fieldOfView, aspectRatio, this.nearClippingPane, this.farClippingPane);
-        this.camera.position.x = 50;
-        this.camera.position.y = 50;
-        this.camera.position.z = 100;
+        this.camera.position.x = 0;
+        this.camera.position.y = 0;
+        this.camera.position.z = -400;
 
         this.renderer = new WebGLRenderer({
             canvas: this.canvas,

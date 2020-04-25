@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {SceneService} from './scene/scene.service';
-import {Color, Mesh, MeshStandardMaterial, SphereBufferGeometry, TextureLoader} from 'three';
+import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereBufferGeometry, TextureLoader, Vector3} from 'three';
 import {Texture} from 'three/src/textures/Texture';
 import {ColorGUIHelper} from './colorGUIHelper';
 import {SettingsService} from './settings/settings.service';
 import {GUI} from 'dat.gui';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 
 @Component({
     selector: 'app-root',
@@ -34,23 +35,45 @@ export class AppComponent implements OnInit {
         this.clean();
 
         const geometry = new SphereBufferGeometry(100, 32, 16);
-        const material = new MeshStandardMaterial({
+        const material1 = new MeshBasicMaterial({
+            color: 0x3a3030
+        });
+        const material2 = new MeshStandardMaterial({
             color: 0x3a3030,
             metalness: 0.1,
             roughness: 1.0
         });
-        const mesh = new Mesh(geometry, material);
-        this.sceneService.add(mesh);
 
-        const gui = this.settingsService.gui;
-        this.tempGui = gui.addFolder('colour');
-        const colorGUIHelper = new ColorGUIHelper(material, 'color');
-        this.tempGui.addColor(colorGUIHelper, 'value').name('color');
-        this.tempGui.add(material, 'metalness', 0, 1);
-        this.tempGui.add(material, 'roughness', 0, 1);
+        const mesh1 = new Mesh(geometry, material1);
+        mesh1.position.set(-100, 0, 0);
+        this.sceneService.add(mesh1);
+        const mesh2 = new Mesh(geometry, material2);
+        mesh2.position.set(100, 0, 0);
+        this.sceneService.add(mesh2);
+
+        this.tempGui = new GUI();
+        const colorGUIHelper1 = new ColorGUIHelper(material1, 'color');
+        this.tempGui.addColor(colorGUIHelper1, 'value').name('color');
+        const colorGUIHelper2 = new ColorGUIHelper(material1, 'color');
+        this.tempGui.addColor(colorGUIHelper2, 'value').name('color');
+        this.tempGui.add(material2, 'metalness', 0, 1);
+        this.tempGui.add(material2, 'roughness', 0, 1);
     }
 
-    onNormalMapClick() {
+    onNormalMapVolumeClick() {
+        this.clean();
+
+        const loader = new GLTFLoader();
+        loader.load('assets/gltf/normal-tangent-test/NormalTangentTest.gltf', (gltf) => {
+            const scene = gltf.scene;
+            const mesh = scene.children[0];
+            mesh.scale.copy(new Vector3(150, 150, 150));
+            this.sceneService.add(mesh);
+        });
+    }
+
+
+    onNormalMapTextureClick() {
         this.clean();
 
         const geometry = new SphereBufferGeometry(100, 32, 16);
@@ -110,7 +133,8 @@ export class AppComponent implements OnInit {
 
     private clean() {
         if (this.tempGui) {
-            this.settingsService.gui.removeFolder(this.tempGui);
+            this.tempGui.destroy();
+            this.tempGui = undefined;
         }
         this.sceneService.clean();
     }
