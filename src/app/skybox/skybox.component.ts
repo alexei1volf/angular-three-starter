@@ -106,7 +106,7 @@ export class SkyboxComponent implements OnInit, OnDestroy, AfterViewInit {
             side: BackSide
         });
 
-        cubeMaterial.envMap = textureCube;
+        (cubeMaterial as any).envMap = textureCube;
 
         // skybox
         const cubeMesh = new Mesh(new BoxBufferGeometry(100, 100, 100), cubeMaterial);
